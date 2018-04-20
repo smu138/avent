@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="c08718d9-ad0e-4090-9ed4-0ad110f11e4c" name="hetzner" url="http://195.201.141.26">
+        <fileTransfer host="195.201.141.26" port="22" rootFolder="/var/www/html/avent" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions controlEncoding="UTF-8" dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

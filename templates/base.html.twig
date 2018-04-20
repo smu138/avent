@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="paysApp">
+<head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+</head>
+<body>
+<h1>Кредитный калькулятор</h1>
+
+
+<div class="container-fluid" ng-controller="PaysListController">
+    <!--form content-->
+    <div class="row">
+        <div class="col-md-12 text-center">
+            {{ form_start(pays_form,
+                {
+                    'action': path('getCalculate'),
+                    'method': 'POST',
+                    'attr': {'ng-submit': 'submit($event)'}
+
+                }
+            ) }}
+            {{ form_widget(pays_form) }}
+            {{ form_end(pays_form) }}
+
+        </div>
+    </div>
+
+
+
+
+    {% verbatim %}
+    <div class="row">
+        <!--Body content-->
+        <div class="col-md-12">
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Номер платежа</th>
+                        <th scope="col">Дата платежа</th>
+                        <th scope="col">Основной долг</th>
+                        <th scope="col">Проценты</th>
+                        <th scope="col">Сумма к оплате</th>
+                        <th scope="col">Остаток кредита</th>
+
+
+                    </tr>
+                </thead>
+
+                    <tbody>
+
+                        <tr ng-repeat="onePay in catchedPays">
+                            <td>{{ onePay.payNumber }}</td>
+                            <td>{{ onePay.payDate| date : "dd.MM.yyyy" }}</td>
+                            <td>{{ onePay.mainDebt| number:2 }}</td>
+                            <td>{{ onePay.percentsToPay| number:2 }}</td>
+                            <td>{{ onePay.paySumm| number:2 }}</td>
+                            <td>{{ onePay.payLeft| number:2 }}</td>
+
+
+                        </tr>
+                    </tbody>
+                </table>
+
+        </div>
+    </div>
+    {% endverbatim %}
+</div>
+
+
+
+
+
+
+
+
+<!-- jQuery first, then Bootstrap JS. -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script src="/js/main.js"></script>
+
+<!--
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+-->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js" integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7" crossorigin="anonymous"></script>
+</body>
+</html>
+
+
+
+
+
+
+
