@@ -16,10 +16,17 @@ class PaysLogic extends Pays
 {
 
     private $entityManager;
-    private $payDate;
     private $isFirstRun = true;
     private $unique_num;
 
+	/**
+	 * Удаляет предыдущий платеж и запускает новый.
+	 *
+	 * @param Pays $paysPicked
+	 * @param ObjectManager $entityManager
+	 *
+	 * @throws \Exception
+	 */
     public function makeCalculations(Pays $paysPicked, ObjectManager $entityManager){
 
         $this->entityManager = $entityManager;
@@ -39,9 +46,13 @@ class PaysLogic extends Pays
     }
 
 
-
+	/**
+	 * Рекурсивно создает график платежей
+	 *
+	 * @param Pays $data
+	 * @throws \Exception
+	 */
     private function repeatIt(Pays $data){
-
 
         $newPay = new Pays();
 
@@ -60,9 +71,6 @@ class PaysLogic extends Pays
 
         $mPs = $yearPercents / 100 / 12;
 
-        //echo '$mPs = '.$mPs.'<br>';
-
-        //echo '$needPay = '.$needPay.'<br>';
 
         //остаток от всего кредита
         if($this->isFirstRun){
@@ -71,7 +79,6 @@ class PaysLogic extends Pays
 	        $this->needPay = $overallSumm * ($mPs + ( $mPs / ($pow -1) ) );
 
 	        $newPay->setPaySumm($this->needPay);
-
 
 	        $pay_left = $overallSumm;
             $newPay->setPayLeft($overallSumm);
@@ -85,19 +92,14 @@ class PaysLogic extends Pays
         //сумма прцентов
         $percents_to_pay = $pay_left * 0.1 / 12;
         $newPay->setPercentsToPay($percents_to_pay);
-        //echo '$percents_to_pay = '.$percents_to_pay.'<br>';
 
         //основной долг
         $main_debt = $this->needPay - $percents_to_pay;
         $newPay->setMainDebt($main_debt);
-        //echo '$main_debt = '.$main_debt.'<br>';
 
         $newPay->setPayNumber($payNumber + 1);
 
         $newPay->setOverallSumm($pay_left);
-
-        //echo '$pay_left = '.$pay_left.'<br>';
-        //echo '<hr>';
 
         $date = $data->getPayDate()->format('Y-m-d');
 	    $start = new \DateTime($date, new \DateTimeZone("UTC"));
@@ -110,7 +112,8 @@ class PaysLogic extends Pays
         $this->entityManager->flush();
 
         $this->isFirstRun = false;
-        //и пройти дальше по циклу
+
+        //рекурсия
         if($payNumber < $overallMonths){
             $this->repeatIt($newPay);
         }
